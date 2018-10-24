@@ -2,7 +2,7 @@
 Shell script to generate fake commits
 
 ### Usage
-1. Create a new github repo
+1. Create a new github repo or your current Github account
 2. Run ```./commitator.sh```
 
 ### Screenshot
