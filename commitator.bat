@@ -27,18 +27,21 @@ SET date=%d%%t: =0%
 ECHO Generating fake contributions
 
 FOR /L %%I IN (365,-1,0) DO ( :: Loop Backwards through year
+		mkdir %%I
+		cd %%I
 		call :genRand num :: Randomly determine number of commits that day
 		ECHO Seed: !num!
 		FOR /L %%J in (!num!, -1, 0) DO ( :: Loop through days commits
 			SET filename=%%I_%%J
 			SET /A rDate=%%I * 60*60*24
-			SET rDate=-!rDate!
+			:: SET rDate=-!rDate!
 			call :ADD %date% !rDate! new_date
-			ECHO %date% + !rDate! = !new_date!
+			ECHO %date% !rDate! !new_date!
 			ECHO > !filename!.txt
-			git add !filename!
-			git commit --date=!new_date! -m !filename!
+			git add !filename!.txt
+			git commit --date=format:relative:!rDate!.seconds.ago -m !filename!
 		)
+		cd..
 		ECHO.
 )       
 
@@ -47,7 +50,6 @@ git remote add origin !repo!
 git push origin master
 
 SET /P cleanUP="Cleanup? [y/n]"
-ECHO yuhhh %cleanUP%
 IF %cleanUP%==y (
 	CD..
 	ECHO %cd%
