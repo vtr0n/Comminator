@@ -8,7 +8,11 @@ ECHO Your link is: %repo%
 
 ECHO. 
 ECHO Enter the name you wish the repo folder to be
-SET /P  folder=""
+SET /P folder=""
+
+ECHO.
+ECHO Enter the max number of commits you'd like in a day
+SET /P max=""
 
 ECHO.
 ECHO Making repo...
@@ -39,7 +43,6 @@ FOR /L %%I IN (365,-1,0) DO ( :: Loop Backwards through year
 )       
 
 git remote add origin !repo!
-
 git push origin master
 
 SET /P cleanUP="Cleanup? [y/n]"
@@ -57,5 +60,5 @@ ENDLOCAL
 PAUSE
 
 :genRand
-SET /A %1=%random% * (4 - 1 + 1) / 32768 + 1
+SET /A %1=%random% * (%max% - 1 + 1) / 32768 + 1
 EXIT /B
